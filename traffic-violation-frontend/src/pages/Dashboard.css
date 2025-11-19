@@ -1,0 +1,86 @@
+/* Dashboard.css (NEW) */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.stat-box {
+  /* --- The "Frosted Glass" effect --- */
+  background: rgba(30, 41, 59, 0.4); /* Dark, semi-transparent glass */
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  /* --- End Glass --- */
+  
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.stat-box:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Icon Styling --- */
+.stat-icon {
+  font-size: 2.2rem;
+  padding: 1rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stat-info h3 {
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+  color: #94a3b8; /* Lighter grey title */
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-align: left;
+}
+.stat-info p {
+  margin-bottom: 0;
+  color: #fff; /* White main text */
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-align: left;
+  line-height: 1.1;
+}
+
+/* --- Color Themeing --- */
+.stat-icon.vehicle {
+  background-color: rgba(244, 164, 0, 0.1);
+  color: #f4a400;
+}
+.stat-icon.violation {
+  background-color: rgba(240, 106, 17, 0.1);
+  color: #f06a11;
+}
+.stat-icon.top-violation {
+  background-color: rgba(42, 100, 163, 0.1);
+  color: #2a64a3;
+}
+.stat-icon.revenue {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+.stat-info p.revenue { color: #28a745; }
+.stat-icon.outstanding {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+.stat-info p.outstanding { color: #dc3545; }
+
+/* --- Animation --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

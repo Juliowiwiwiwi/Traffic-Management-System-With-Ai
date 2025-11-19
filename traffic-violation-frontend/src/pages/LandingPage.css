@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+.landing-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  padding: 2rem;
+  font-family: 'Roboto', sans-serif;
+  background: #0d1117; /* A very dark, almost-black */
+  color: #fff;
+  overflow: hidden; /* CRITICAL: Hides the blobs as they move */
+  position: relative;
+}
+
+/* --- The Parallax Container --- */
+.landing-hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  width: 100%;
+  max-width: 1200px;
+  gap: 4rem;
+  z-index: 2; /* Sits on top of the blobs */
+  
+  /* NEW: Makes the parallax smooth */
+  transition: transform 0.1s ease-out;
+}
+
+/* --- Left Side (Unchanged from before) --- */
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: fadeInUp 0.8s ease-out;
+}
+.hero-logo {
+  width: 70px;
+  height: auto;
+  margin-bottom: 1.5rem;
+}
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.1;
+  color: #fff;
+}
+.hero-subtitle {
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin: 0;
+  color: #f4a400; /* Your yellow highlight */
+}
+.hero-slogan {
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin-top: 1.5rem;
+  color: #c9d1d9; /* Lighter GitHub grey */
+  max-width: 450px;
+}
+.hero-right {
+  animation: fadeInRight 0.8s 0.2s ease-out backwards;
+}
+
+/* --- NEW: The "Bubbly" Blobs --- */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px); /* This makes them soft */
+  opacity: 0.4;
+  z-index: 1; /* Behind the content */
+}
+
+/* Blob 1: Your Yellow */
+.blob-1 {
+  width: 400px;
+  height: 400px;
+  background: #f4a400;
+  animation: moveBlob 20s infinite alternate;
+}
+
+/* Blob 2: A Cool Blue */
+.blob-2 {
+  width: 300px;
+  height: 300px;
+  background: #2a64a3;
+  animation: moveBlob 25s infinite alternate-reverse;
+}
+
+/* Blob 3: A Soft White/Grey */
+.blob-3 {
+  width: 250px;
+  height: 250px;
+  background: #c9d1d9;
+  animation: moveBlob 15s infinite alternate;
+}
+
+/* --- NEW: The Animations --- */
+@keyframes moveBlob {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(300px, -150px) scale(1.2);
+  }
+  100% {
+    transform: translate(-100px, 100px) scale(0.9);
+  }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .landing-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 500px;
+  }
+  .hero-left {
+    text-align: center;
+    align-items: center;
+  }
+  .hero-title { font-size: 2.5rem; }
+  .hero-subtitle { font-size: 1.75rem; }
+}

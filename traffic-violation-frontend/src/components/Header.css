@@ -1,0 +1,102 @@
+/* Header.css (NEW) */
+.main-header {
+  position: fixed;
+  top: 1rem; /* Float it from the top */
+  left: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  
+  /* The "Frosted Glass" effect */
+  background: rgba(30, 41, 59, 0.4); /* Dark, semi-transparent glass */
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  
+  padding: 0 1.5rem;
+  height: 60px;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Left Side: Logo */
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.nav-logo img {
+  height: 30px;
+  width: auto;
+}
+.nav-logo span {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Center: Nav Links */
+.nav-menu {
+  display: flex;
+  gap: 1.5rem;
+}
+.nav-menu a {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #cbd5e1; /* Soft grey */
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s;
+}
+.nav-menu a:hover {
+  color: #fff;
+}
+/* Cool underline effect */
+.nav-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #f4a400;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s;
+}
+.nav-menu a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Right Side: Logout Button */
+.logout-button {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #f4a400; /* Your yellow accent */
+  color: #0d1117; /* Dark text */
+  transition: all 0.2s ease-in-out;
+}
+.logout-button:hover {
+  background-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px 0 rgba(244, 164, 0, 0.4);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,55 @@
+request.json -lifesaver
+db.comit -save
+cursor.close
+db.close
+post and get
+@api.route
+ERROR HANDLING
+
+
+
+CURL 
+
+how i used post since posman didnt work:
+
+curl -X POST http://localhost:5000/register-vehicle \
+     -H "Content-Type: application/json" \
+     -d '{
+           "OwnerName": "Devanarayan CS",
+           "LicensePlate": "KA05MJ1234",
+           "VehicleType": "Car"
+         }'
+-H "Content-Type: application/json"   ensures data sent is in json format
+-d jason body
+
+added violation
+curl -X POST "http://127.0.0.1:5000/add-violation" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "LicensePlate": "KA05MJ1234",
+           "ViolationType": "Over-speeding",
+           "FineAmount": 500,
+           "Location": "MG Road, Bangalore"
+         }'
+
+update name 
+
+get in curl
+curl -X GET http://localhost:5000/get-vehicles
+
+
+
+FOR FRONT END
+i used npm to create a react application
+npm create-react-app traffic-violation-frontend
+
+
+i use axios to handle get post put delete 
+
+
+
+
+login stuff
+curl -X POST http://localhost:5000/login \
+-H "Content-Type: application/json" \
+-d '{"username": "devanarayan", "password": "password123"}'

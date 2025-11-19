@@ -1,0 +1,126 @@
+/* AutoDetect.css (NEW) */
+.autodetect-container {
+  max-width: 600px;
+  margin: 0 auto;
+  
+  /* --- The "Frosted Glass" effect --- */
+  background: rgba(30, 41, 59, 0.4);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  /* --- End Glass --- */
+
+  padding: 2rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.autodetect-title {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.autodetect-subtitle {
+  text-align: center;
+  color: #cbd5e1;
+  margin-bottom: 2rem;
+}
+
+.autodetect-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+/* Glass Upload Button */
+.form-group .upload-label {
+  display: block;
+  width: 400px;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  color: #f4a400;
+  border: 2px dashed rgba(244, 164, 0, 0.5);
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.form-group .upload-label:hover {
+  background: rgba(244, 164, 0, 0.2);
+  border-color: #f4a400;
+  color: #f4a400;
+}
+
+.form-group .upload-input {
+  display: none;
+}
+
+.image-preview-container {
+  width: 100%;
+  max-height: 400px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Red Button */
+.autodetect-button {
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #dc3545;
+  width: 400px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.autodetect-button:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px 0 rgba(220, 53, 69, 0.4);
+}
+.autodetect-button.disabled {
+  background: #5a6268;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.success-message, .error-message {
+  color: white;
+  padding: 1rem;
+  border-radius: 6px;
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: 500;
+  border: 1px solid;
+  width: 100%;
+  box-sizing: border-box;
+}
+.success-message {
+  background: rgba(40, 167, 69, 0.3);
+  border-color: rgba(40, 167, 69, 0.7);
+}
+.error-message {
+  background: rgba(220, 53, 69, 0.3);
+  border-color: rgba(220, 53, 69, 0.7);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

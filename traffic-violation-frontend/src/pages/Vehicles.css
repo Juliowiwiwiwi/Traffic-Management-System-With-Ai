@@ -1,0 +1,147 @@
+/* Vehicles.css */
+.vehicles-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+  }
+  
+  .vehicles-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .vehicles-title {
+    font-size: 1.8rem;
+    color: #fff;
+    margin: 0;
+    font-weight: 600;
+  }
+  
+  .vehicles-list {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .vehicles-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  
+  .vehicles-table th {
+    background: #f4a400;
+    color: #2c3e50;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+  }
+  
+  .vehicles-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #eaeaea;
+    color: #34495e;
+  }
+  
+  .vehicles-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .vehicles-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .vehicles-table tr:nth-child(even) {
+    background-color: #f8f8f8;
+  }
+  
+  .vehicles-table tr:nth-child(even):hover {
+    background-color: #f0f0f0;
+  }
+  
+  .loading-state {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #7f8c8d;
+  }
+  
+  .error-state {
+    background: #fdecea;
+    padding: 1.5rem;
+    border-radius: 8px;
+    color: #c0392b;
+    margin-bottom: 1rem;
+  }
+  
+  .retry-btn {
+    background: #f4a400;
+    color: #2c3e50;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+    margin-top: 1rem;
+  }
+  
+  .retry-btn:hover {
+    background: #e69100;
+  }
+  
+
+/* --- ADD THESE STYLES FOR THE DELETE BUTTON --- */
+ .vehicles-table th:last-child,
+ .vehicles-table td:last-child {
+   text-align: center;
+   width: 80px; /* Give it a fixed width */
+ }
+ 
+ .delete-btn {
+   background-color: transparent;
+   border: none;
+   cursor: pointer;
+   font-size: 1.2rem; /* Make the trash icon bigger */
+   padding: 5px;
+   border-radius: 4px;
+   transition: background-color 0.2s, color 0.2s;
+ }
+ 
+ .delete-btn:hover {
+   background-color: #f8d7da; /* Light red background on hover */
+   color: #721c24; /* Dark red icon color on hover */
+ }
+ /* --- END OF ADDED STYLES delete button --- */
+
+
+
+
+
+
+  /* Responsive Table */
+  @media (max-width: 768px) {
+    .vehicles-table {
+      display: block;
+      overflow-x: auto;
+    }
+    
+    .vehicles-table th, 
+    .vehicles-table td {
+      padding: 0.75rem 0.5rem;
+    }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }

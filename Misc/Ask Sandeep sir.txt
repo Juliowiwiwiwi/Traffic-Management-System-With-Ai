@@ -1,0 +1,13 @@
+Ask Sandeep sir
+mainly
+1) Xamp not working  //not testing using xamp
+2) how to post with postman / any other alternatives for that //using curl command instead
+3)how to implement the different pages // react
+4)website design  //not certain yet .. made a rough one .. might change later
+5)how to implement registering through website like using curl command in terminal
+6)login and auth is not setup yet
+7)Need clarity on how the setup should run ideally
+8) too many random errors like it would wor for a while the suddenly error but then again it will be fine..
+   dodnt know whats up here //added try and now its less
+
+ what next and how to proceed!

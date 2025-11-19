@@ -1,0 +1,75 @@
+/* App.css (NEW) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  
+  /* --- NEW DARK BACKGROUND --- */
+  background: #0d1117; /* The dark background from your landing page */
+  color: #c9d1d9; /* A light, soft text color for the body */
+  /* --- END NEW --- */
+}
+
+/* The yellow header styles are GONE.
+  We are moving them to Header.css
+*/
+
+/* This is the main wrapper for all your logged-in pages.
+  We add the animated blobs here so they are on EVERY page.
+*/
+.main-content {
+  position: relative;
+  overflow: hidden; /* Contains the blobs */
+  padding: 2rem;
+  padding-top: 100px; /* Give space for the new floating header */
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* This class is for the landing page */
+.landing-main {
+  padding-top: 0;
+}
+
+/* --- The "Bubbly" Blobs --- */
+/* We add them to .main-content to have them on every page */
+.main-content::before,
+.main-content::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px); /* This makes them soft */
+  z-index: -1; /* Behind the content */
+}
+
+/* Blob 1: Your Yellow */
+.main-content::before {
+  width: 400px;
+  height: 400px;
+  background: #f4a400;
+  opacity: 0.3;
+  animation: moveBlob 20s infinite alternate;
+}
+
+/* Blob 2: A Cool Blue */
+.main-content::after {
+  width: 300px;
+  height: 300px;
+  background: #2a64a3;
+  opacity: 0.3;
+  animation: moveBlob 25s infinite alternate-reverse;
+}
+
+/* --- The Animations --- */
+@keyframes moveBlob {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(300px, -150px) scale(1.2);
+  }
+  100% {
+    transform: translate(-100px, 100px) scale(0.9);
+  }
+}

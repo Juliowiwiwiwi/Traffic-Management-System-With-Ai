@@ -1,0 +1,89 @@
+/* This replaces your old Login.css */
+
+/* --- The "Frosted Glass" Form Container --- */
+.login-container {
+  padding: 2.5rem 2rem;
+  
+  /* The "Glass" effect */
+  background: rgba(30, 41, 59, 0.4); /* Dark, semi-transparent glass */
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px); /* This is the "frosty" part */
+  -webkit-backdrop-filter: blur(12px);
+  
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.login-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+/* --- Styled Inputs --- */
+.login-form input {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.2); /* Darker input */
+  color: #fff;
+  
+  /* Cool interaction */
+  transition: all 0.2s ease-in-out;
+}
+
+.login-form input::placeholder {
+  color: #94a3b8; /* Lighter grey placeholder */
+}
+
+.login-form input:focus {
+  outline: none;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #f4a400; /* Your yellow accent! */
+  box-shadow: 0 0 15px 0 rgba(244, 164, 0, 0.3); /* Yellow glow */
+}
+
+/* --- Styled Button --- */
+.login-button {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  
+  /* Your yellow accent color! */
+  background-color: #f4a400; 
+  color: #0d1117; /* Dark text for contrast */
+  
+  /* Hover animation */
+  transition: all 0.2s ease-in-out;
+}
+
+.login-button:hover {
+  background-color: #fff; /* White hover */
+  transform: translateY(-2px); /* "Lift" the button */
+  box-shadow: 0 4px 20px 0 rgba(244, 164, 0, 0.4); /* Yellow glow */
+}
+
+/* --- Error Message --- */
+.error-message {
+  padding: 0.75rem 1rem;
+  background: rgba(220, 53, 69, 0.3); /* Red glass */
+  border: 1px solid rgba(220, 53, 69, 0.7);
+  color: #f8d7da;
+  border-radius: 6px;
+  text-align: center;
+}

@@ -1,0 +1,187 @@
+/* Violations.css */
+.violations-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .violations-header {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .section-title {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .search-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .search-input {
+    padding: 0.8rem 1rem;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    min-width: 300px;
+    transition: border-color 0.3s;
+  }
+  
+  .search-input:focus {
+    border-color: #f4a400;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(244, 164, 0, 0.2);
+  }
+  
+  .search-button {
+    background-color: #f4a400;
+    color: #2c3e50;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .search-button:hover {
+    background-color: #e69100;
+  }
+  
+  .search-button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    margin-top: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .violations-table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+  }
+  
+  .violations-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  
+  .violations-table th {
+    background: #f4a400;
+    color: #2c3e50;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+  }
+  
+  .violations-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #eaeaea;
+    color: #34495e;
+  }
+  
+  .violations-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .violations-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  
+  .status-badge.paid {
+    background-color: #d5f5e3;
+    color: #1e8449;
+  }
+  
+  .status-badge.unpaid {
+    background-color: #fadbd8;
+    color: #c0392b;
+  }
+  
+  .paid {
+    color: #1e8449;
+    font-weight: 600;
+  }
+  
+  .unpaid {
+    color: #c0392b;
+    font-weight: 600;
+  }
+  
+  .no-results {
+    text-align: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    color: #7f8c8d;
+  }
+  
+  .loading-spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #2c3e50;
+    animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .violations-container {
+      padding: 0 1rem;
+    }
+    
+    .search-input {
+      min-width: 100%;
+    }
+    
+    .search-button {
+      width: 100%;
+    }
+    
+    .violations-table {
+      font-size: 0.85rem;
+    }
+    
+    .violations-table th,
+    .violations-table td {
+      padding: 0.75rem 0.5rem;
+    }
+  }
