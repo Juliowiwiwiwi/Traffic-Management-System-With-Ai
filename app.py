@@ -15,6 +15,7 @@ from flask import send_from_directory
 from audit.schema import canonical_violation_payload
 from audit.hasher import hash_violation
 from datetime import datetime
+from blockchain.service import setup_blockchain, anchor_violation_on_chain
 
 
 # initialize flask app
@@ -22,6 +23,12 @@ app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = 'secretig'  
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
+
+print("Connecting to local Blockchain...")
+if setup_blockchain():
+    print("Blockchain connected and contract ready.")
+else:
+    print("WARNING: Blockchain features may not work. Is Ganache running on port 8545?")
 
 
 print("Loading ML models and EasyOCR...")
@@ -386,11 +393,13 @@ def get_my_profile_stats():
 
 # vehicle registration API
 @app.route('/register-vehicle', methods=['POST'])
+@jwt_required()
 def register_vehicle():
+    current_user = get_jwt_identity()
 
     data = request.json
-    query = "INSERT INTO Vehicle (OwnerName, LicensePlate, VehicleType, Contact, Address) VALUES (%s, %s, %s, %s, %s)"
-    values = (data['OwnerName'], data['LicensePlate'], data['VehicleType'], data['Contact'], data['Address'])
+    query = "INSERT INTO Vehicle (OwnerName, LicensePlate, VehicleType, Contact, Address, RegisteredBy) VALUES (%s, %s, %s, %s, %s, %s)"
+    values = (data['OwnerName'], data['LicensePlate'], data['VehicleType'], data['Contact'], data['Address'], current_user)
 
     try:
         db = get_db_connection()
@@ -496,7 +505,9 @@ def get_vehicle(license_plate):
 #violation stuff
 # add violation API
 @app.route('/add-violation', methods=['POST'])
+@jwt_required()
 def add_violation():
+    current_user = get_jwt_identity()
 
     data = request.json
 
@@ -519,12 +530,40 @@ def add_violation():
         vehicle_id = vehicle[0]
 
         # insert violation
-        query = "INSERT INTO Violations (VehicleID, ViolationType, FineAmount, Location) VALUES (%s, %s, %s, %s)"
-        values = (vehicle_id, data['ViolationType'], data['FineAmount'], data['Location'])
+        query = "INSERT INTO Violations (VehicleID, ViolationType, FineAmount, Location, ReportedBy) VALUES (%s, %s, %s, %s, %s)"
+        values = (vehicle_id, data['ViolationType'], data['FineAmount'], data['Location'], current_user)
         cursor.execute(query, values)
         db.commit()
+        violation_id = cursor.lastrowid
+        
+        # Hash and verify
+        payload = canonical_violation_payload(
+            violation_id=violation_id,
+            license_plate=data['LicensePlate'],
+            violation_type=data['ViolationType'],
+            fine_amount=data['FineAmount'],
+            location=data['Location'],
+            timestamp=datetime.utcnow(),
+            evidence_filename=None # no evidence right now
+        )
+        v_hash = hash_violation(payload)
+        
+        # update the db
+        cursor.execute(
+            "UPDATE Violations SET violation_hash=%s WHERE ViolationID=%s",
+            (v_hash, violation_id)
+        )
+        db.commit()
+        
         cursor.close()
         db.close()
+        
+        # Anchor to blockchain
+        print(f"Anchoring manual violation {violation_id} to blockchain...")
+        tx_hash = anchor_violation_on_chain(violation_id, v_hash)
+        if tx_hash:
+             print(f"Anchored. Transaction Hash: {tx_hash}")
+
         return jsonify({"message": "Violation recorded successfully!"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 400
@@ -540,6 +579,8 @@ def add_violation():
 @app.route('/autodetect', methods=['POST'])
 @jwt_required()
 def autodetect_violation():
+    current_user = get_jwt_identity()
+    
     if 'image_file' not in request.files:
         return jsonify({"error": "No image file provided"}), 400
 
@@ -606,10 +647,10 @@ def autodetect_violation():
             new_owner_name = f"UNKNOWN ({unknown_count + 1}) (Auto-Detected)"
 
             #Define the query
-            register_query = """INSERT INTO Vehicle(OwnerName, LicensePlate, VehicleType, Contact, Address) VALUES (%s, %s, %s, %s, %s)"""
+            register_query = """INSERT INTO Vehicle(OwnerName, LicensePlate, VehicleType, Contact, Address, RegisteredBy) VALUES (%s, %s, %s, %s, %s, %s)"""
             
             #Use the 'new_owner_name' variable
-            placeholder_values = (new_owner_name, plate_number, "Motorcycle", "N/A", "N/A")
+            placeholder_values = (new_owner_name, plate_number, "Motorcycle", "N/A", "N/A", current_user)
             cursor.execute(register_query, placeholder_values)
             db.commit()
             vehicle_id = cursor.lastrowid
@@ -621,8 +662,8 @@ def autodetect_violation():
         default_location = "Auto-Detected via Camera"
 
         # Insert violation
-        query = "INSERT INTO Violations (VehicleID, ViolationType, FineAmount, Location, evidence_image) VALUES (%s, %s, %s, %s, %s)"
-        values = (vehicle_id, violation_type, default_fine, default_location, unique_filename)
+        query = "INSERT INTO Violations (VehicleID, ViolationType, FineAmount, Location, evidence_image, ReportedBy) VALUES (%s, %s, %s, %s, %s, %s)"
+        values = (vehicle_id, violation_type, default_fine, default_location, unique_filename, current_user)
         cursor.execute(query, values)
         db.commit()
         
@@ -646,6 +687,11 @@ def autodetect_violation():
         cursor.close()
         db.close()
 
+        # Anchor to blockchain
+        print(f"Anchoring AI violation {violation_id} to blockchain...")
+        tx_hash = anchor_violation_on_chain(violation_id, v_hash)
+        if tx_hash:
+             print(f"Anchored. Transaction Hash: {tx_hash}")
         
         return jsonify({
             "message": "Success! Violation added.",
@@ -688,6 +734,8 @@ def iot_report_speeding():
     try:
         #same auto regis logic
         db = get_db_connection()
+        if not db:
+            return jsonify({"error": "Database connection failed"}), 500
         cursor = db.cursor()
 
         cursor.execute("SELECT VehicleID FROM Vehicle WHERE LicensePlate = %s", (plate_number,))
@@ -722,9 +770,34 @@ def iot_report_speeding():
         
         cursor.execute(query, values)
         db.commit()
-        
+        violation_id = cursor.lastrowid
+
+        payload = canonical_violation_payload(
+            violation_id=violation_id,
+            license_plate=plate_number,
+            violation_type="Speeding",
+            fine_amount=fine_amount,
+            location="Simulated Radar (NH-48)",
+            timestamp=datetime.utcnow(),
+            evidence_filename=None
+        )
+        v_hash = hash_violation(payload)
+
+        cursor.execute(
+            "UPDATE Violations SET violation_hash=%s WHERE ViolationID=%s",
+            (v_hash, violation_id)
+        )
+        db.commit()
+
         cursor.close()
         db.close()
+        
+        # Anchor to blockchain
+        print(f"Anchoring IoT violation {violation_id} to blockchain...")
+        tx_hash = anchor_violation_on_chain(violation_id, v_hash)
+        if tx_hash:
+             print(f"Anchored. Transaction Hash: {tx_hash}")
+
         
         return jsonify({"message": f"Successfully logged speeding violation for {plate_number}"}), 201
 

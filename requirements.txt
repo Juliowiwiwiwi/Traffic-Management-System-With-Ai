@@ -1,0 +1,11 @@
+Flask==3.0.0
+flask-cors==4.0.0
+flask-jwt-extended==4.5.3
+flask-bcrypt==1.0.1
+mysql-connector-python==8.2.0
+opencv-python==4.8.1.78
+numpy==1.26.2
+ultralytics==8.0.222
+easyocr==1.7.1
+web3==6.11.3
+eth-account==0.10.0

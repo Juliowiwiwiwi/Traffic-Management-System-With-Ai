@@ -1,5 +1,31 @@
 {
   "dependencies": {
     "react-tsparticles": "^2.12.2"
-  }
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^4.0.4",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@types/node": "^22.19.11",
+    "ethers": "^5.8.0",
+    "hardhat": "^2.22.1",
+    "typescript": "~5.8.0"
+  },
+  "name": "traffic-pbl2",
+  "version": "1.0.0",
+  "description": "A full-stack **Traffic Management System** built with **Flask, React, MySQL, and AI**. The system manages vehicles, violations, payments, and includes an **AI-powered helmet violation detector with automatic license plate recognition**.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Juliowiwiwiwi/Traffic-Management-System-With-Ai.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Juliowiwiwiwi/Traffic-Management-System-With-Ai/issues"
+  },
+  "homepage": "https://github.com/Juliowiwiwiwi/Traffic-Management-System-With-Ai#readme"
 }
