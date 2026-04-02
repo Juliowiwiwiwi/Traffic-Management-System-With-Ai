@@ -1,0 +1,61 @@
+/* ViolationsMap.css */
+
+.map-container {
+    margin-top: 2rem;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.map-title {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #2a3eb1;
+    font-size: 1.5rem;
+}
+
+.leaflet-map {
+    height: 500px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    z-index: 1; /* Keep leaflet under React overlays */
+}
+
+.map-popup {
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.popup-plate {
+    font-size: 1.1rem;
+    color: #111;
+    border-bottom: 2px solid #2a3eb1;
+    padding-bottom: 2px;
+    display: inline-block;
+    margin-bottom: 4px;
+}
+
+.popup-type {
+    font-weight: 600;
+    color: #666;
+}
+
+.popup-status {
+    font-weight: bold;
+}
+
+.popup-status.paid {
+    color: #4CAF50;
+}
+
+.popup-status.unpaid {
+    color: #f44336;
+}
+
+.popup-date {
+    color: #888;
+    font-size: 0.85rem;
+}

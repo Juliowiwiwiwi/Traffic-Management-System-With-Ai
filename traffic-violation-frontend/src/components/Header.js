@@ -23,14 +23,15 @@ const Header = ({ isAuthenticated, setIsAuthenticated }) => {
 
         {/* Center: Navigation Links */}
         <nav className="nav-menu">
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/vehicles">Vehicles</Link>
+          {localStorage.getItem('role') === 'admin' && <Link to="/dashboard">Dashboard</Link>}
+          {localStorage.getItem('role') === 'admin' && <Link to="/vehicles">Vehicles</Link>}
           <Link to="/violations">Violations</Link>
           <Link to="/payments">Payments</Link>
-          <Link to="/register-vehicle">Register Vehicle</Link>
-          <Link to="/add-violation">Add Violation</Link>
-          <Link to="/autodetect">Auto Detect</Link>
+          {localStorage.getItem('role') === 'admin' && <Link to="/register-vehicle">Register Vehicle</Link>}
+          {localStorage.getItem('role') === 'admin' && <Link to="/add-violation">Add Violation</Link>}
+          {localStorage.getItem('role') === 'admin' && <Link to="/autodetect">Auto Detect</Link>}
           <Link to="/profile">My Profile</Link>
+          {localStorage.getItem('role') === 'admin' && <Link to="/simulation">🌟 3D Sim</Link>}
         </nav>
 
         {/* Right Side: Logout Button */}

@@ -3,12 +3,21 @@ import { addViolation, getVehicles } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import './AddViolation.css';
 
+const fineMap = {
+  "Speeding": 1000,
+  "Red Light Violation": 5000,
+  "Illegal Parking": 500,
+  "Driving Without License": 10000,
+  "Drunk Driving": 15000,
+  "No Helmet": 1000
+};
+
 function AddViolation() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     LicensePlate: "",
     ViolationType: "Speeding",
-    FineAmount: "",
+    FineAmount: fineMap["Speeding"],
     Location: ""
   });
   const [vehicles, setVehicles] = useState([]);
@@ -34,7 +43,15 @@ function AddViolation() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    if (name === "ViolationType") {
+      setFormData(prev => ({ 
+        ...prev, 
+        [name]: value, 
+        FineAmount: fineMap[value] || "" 
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {

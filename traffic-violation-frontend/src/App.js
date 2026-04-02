@@ -10,12 +10,29 @@
   import Dashboard from './pages/Dashboard';
   import LandingPage from './pages/LandingPage';
   import MyProfile from './pages/MyProfile';
+  import Simulation3D from './pages/Simulation3D';
   import './App.css';
 
   function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
       return Boolean(localStorage.getItem('token'));
     });
+
+    const getUserRole = () => localStorage.getItem('role') || 'user';
+    const getDefaultRoute = () => getUserRole() === 'admin' ? "/dashboard" : "/profile";
+
+    // Strict Admin check wrapper
+    const AdminRoute = ({ children }) => {
+      if (!isAuthenticated) return <Navigate to="/login" replace />;
+      if (getUserRole() !== 'admin') return <Navigate to="/profile" replace />;
+      return children;
+    };
+    
+    // Looser Private Route wrapper
+    const PrivateRoute = ({ children }) => {
+      if (!isAuthenticated) return <Navigate to="/login" replace />;
+      return children;
+    };
 
     return (
       <Router>
@@ -25,35 +42,27 @@
         <div className={isAuthenticated ? "main-content" : "landing-main"}>
           <Routes>
             <Route path="/" element={
-              !isAuthenticated ? <LandingPage setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/dashboard" />
+              !isAuthenticated ? <LandingPage setIsAuthenticated={setIsAuthenticated} /> : <Navigate to={getDefaultRoute()} />
             } />
             <Route path="/login" element={
-              !isAuthenticated ? <LandingPage setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/dashboard" />
+              !isAuthenticated ? <LandingPage setIsAuthenticated={setIsAuthenticated} /> : <Navigate to={getDefaultRoute()} />
             } />
-            <Route path="/dashboard" element={
-              isAuthenticated ? <Dashboard /> : <Navigate to="/login" />
-            } />
-            <Route path="/profile" element={
-              isAuthenticated ? <MyProfile /> : <Navigate to="/login" />
-            } />
-            <Route path="/vehicles" element={
-              isAuthenticated ? <Vehicles /> : <Navigate to="/login" />
-            } />
-            <Route path="/violations" element={
-              isAuthenticated ? <Violations /> : <Navigate to="/login" />
-            } />
-            <Route path="/payments" element={
-              isAuthenticated ? <Payments /> : <Navigate to="/login" />
-            } />
-            <Route path="/register-vehicle" element={
-              isAuthenticated ? <RegisterVehicle /> : <Navigate to="/login" />
-            } />
-            <Route path="/add-violation" element={
-              isAuthenticated ? <AddViolation /> : <Navigate to="/login" />
-            } />
-            <Route path="/autodetect" element={
-              isAuthenticated ? <AutoDetect /> : <Navigate to="/login" />
-            } />
+            
+            {/* Admin-only Routes */}
+            <Route path="/dashboard" element={<AdminRoute><Dashboard /></AdminRoute>} />
+            <Route path="/vehicles" element={<AdminRoute><Vehicles /></AdminRoute>} />
+            <Route path="/register-vehicle" element={<AdminRoute><RegisterVehicle /></AdminRoute>} />
+            <Route path="/add-violation" element={<AdminRoute><AddViolation /></AdminRoute>} />
+            <Route path="/autodetect" element={<AdminRoute><AutoDetect /></AdminRoute>} />
+            <Route path="/simulation" element={<AdminRoute><Simulation3D /></AdminRoute>} />
+
+            {/* Standard Authenticated Routes */}
+            <Route path="/profile" element={<PrivateRoute><MyProfile /></PrivateRoute>} />
+            <Route path="/violations" element={<PrivateRoute><Violations /></PrivateRoute>} />
+            <Route path="/payments" element={<PrivateRoute><Payments /></PrivateRoute>} />
+            
+            {/* Catch-all unknown routes */}
+            <Route path="*" element={<Navigate to={getDefaultRoute()} />} />
           </Routes>
         </div>
       </Router>

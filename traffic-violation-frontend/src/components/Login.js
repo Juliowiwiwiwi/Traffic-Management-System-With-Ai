@@ -25,7 +25,11 @@ const Login = ({ setIsAuthenticated }) => {
         localStorage.setItem('token', data.token);
         localStorage.setItem('role', data.role);
         setIsAuthenticated(true);
-        navigate('/dashboard'); // Redirect after successful login
+        if (data.role === 'admin') {
+          navigate('/dashboard'); 
+        } else {
+          navigate('/profile'); 
+        }
       } else {
         setError(data.message || 'Login failed');
       }

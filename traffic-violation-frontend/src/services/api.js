@@ -27,6 +27,10 @@ export const getViolations = async (licensePlate) => {
   return await api.get(`/get-violations/${licensePlate}`);
 };
 
+export const getAllViolations = async () => {
+  return await api.get("/get-all-violations");
+};
+
 export const getViolationDetails = async (violationID) => {
   const token = localStorage.getItem('token');
   const response = await fetch(`http://localhost:5000/get-violation/${violationID}`, {

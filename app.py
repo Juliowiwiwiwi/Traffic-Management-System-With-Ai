@@ -8,6 +8,7 @@ import os
 import cv2
 import numpy as np
 import math
+import random
 from ultralytics import YOLO
 import easyocr
 import io
@@ -24,7 +25,13 @@ app.config['JWT_SECRET_KEY'] = 'secretig'
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 
-print("Connecting to local Blockchain...")
+def get_random_rajasthan_coords():
+    # Covers major parts of Rajasthan including Jaipur
+    lat = random.uniform(24.5, 29.5)
+    lng = random.uniform(70.0, 77.0)
+    return lat, lng
+
+print("Connecting to local Blockchain network...")
 if setup_blockchain():
     print("Blockchain connected and contract ready.")
 else:
@@ -33,6 +40,14 @@ else:
 
 print("Loading ML models and EasyOCR...")
 try:
+    import torch
+    # Monkey-patch torch.load to safely bypass weights_only=True introduced in PyTorch 2.6
+    original_load = torch.load
+    def safe_load(*args, **kwargs):
+        kwargs['weights_only'] = False
+        return original_load(*args, **kwargs)
+    torch.load = safe_load
+    
     helmet_model = YOLO("Weights/best.pt")
     helmet_classNames = ['With Helmet', 'Without Helmet']
     plate_model = YOLO("Weights/license_plate_detector.pt") 
@@ -46,7 +61,7 @@ CORS(app, resources={
     r"/*": {
         "origins": "http://localhost:3000",
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization"]
+        "allow_headers": ["Content-Type", "Authorization", "X-API-Key"]
     }
 }) 
 
@@ -530,8 +545,9 @@ def add_violation():
         vehicle_id = vehicle[0]
 
         # insert violation
-        query = "INSERT INTO Violations (VehicleID, ViolationType, FineAmount, Location, ReportedBy) VALUES (%s, %s, %s, %s, %s)"
-        values = (vehicle_id, data['ViolationType'], data['FineAmount'], data['Location'], current_user)
+        lat, lng = get_random_rajasthan_coords()
+        query = "INSERT INTO Violations (VehicleID, ViolationType, FineAmount, Location, ReportedBy, Latitude, Longitude) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        values = (vehicle_id, data['ViolationType'], data['FineAmount'], data['Location'], current_user, lat, lng)
         cursor.execute(query, values)
         db.commit()
         violation_id = cursor.lastrowid
@@ -662,8 +678,9 @@ def autodetect_violation():
         default_location = "Auto-Detected via Camera"
 
         # Insert violation
-        query = "INSERT INTO Violations (VehicleID, ViolationType, FineAmount, Location, evidence_image, ReportedBy) VALUES (%s, %s, %s, %s, %s, %s)"
-        values = (vehicle_id, violation_type, default_fine, default_location, unique_filename, current_user)
+        lat, lng = get_random_rajasthan_coords()
+        query = "INSERT INTO Violations (VehicleID, ViolationType, FineAmount, Location, evidence_image, ReportedBy, Latitude, Longitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (vehicle_id, violation_type, default_fine, default_location, unique_filename, current_user, lat, lng)
         cursor.execute(query, values)
         db.commit()
         
@@ -727,6 +744,7 @@ def iot_report_speeding():
     data = request.json
     plate_number = data.get('LicensePlate')
     speed = data.get('Speed')
+    is_simulation = data.get('IsSimulation', False)
 
     if not plate_number or not speed:
         return jsonify({"error": "Missing LicensePlate or Speed"}), 400
@@ -744,13 +762,21 @@ def iot_report_speeding():
 
         if not vehicle:
             print(f"[IoT] Vehicle {plate_number} not found. Auto-registering...")
-            cursor.execute("SELECT COUNT(*) FROM Vehicle WHERE OwnerName LIKE 'UNKNOWN (%)'")
-            count_result = cursor.fetchone()
-            unknown_count = count_result[0]
-            new_owner_name = f"UNKNOWN ({unknown_count + 1}) (Auto-Detected)"
+            if is_simulation:
+                cursor.execute("SELECT COUNT(*) FROM Vehicle WHERE OwnerName LIKE 'SIM-WEB-%'")
+                count_result = cursor.fetchone()
+                sim_count = count_result[0]
+                new_owner_name = f"SIM-WEB-{sim_count + 1}"
+                new_vehicle_type = "Car"
+            else:
+                cursor.execute("SELECT COUNT(*) FROM Vehicle WHERE OwnerName LIKE 'UNKNOWN (%)'")
+                count_result = cursor.fetchone()
+                unknown_count = count_result[0]
+                new_owner_name = f"UNKNOWN ({unknown_count + 1}) (Auto-Detected)"
+                new_vehicle_type = "UNKNOWN"
 
             register_query = """INSERT INTO Vehicle(OwnerName, LicensePlate, VehicleType, Contact, Address) VALUES (%s, %s, %s, %s, %s)"""
-            placeholder_values = (new_owner_name, plate_number, "UNKNOWN", "N/A", "N/A")
+            placeholder_values = (new_owner_name, plate_number, new_vehicle_type, "N/A", "N/A")
             
             cursor.execute(register_query, placeholder_values)
             db.commit()
@@ -759,14 +785,14 @@ def iot_report_speeding():
             vehicle_id = vehicle[0]
 
         #calc and log fine and violation
-        fine_amount = (speed - 90) * 10  
-        if fine_amount < 100: fine_amount = 100
+        fine_amount = 1000
 
+        lat, lng = get_random_rajasthan_coords()
         query = """
-            INSERT INTO Violations (VehicleID, ViolationType, FineAmount, Location, ReportedBy) 
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO Violations (VehicleID, ViolationType, FineAmount, Location, ReportedBy, Latitude, Longitude) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
-        values = (vehicle_id, "Speeding", fine_amount, "Simulated Radar (NH-48)", "IoT-Radar-01")
+        values = (vehicle_id, "Speeding", fine_amount, "Simulated Radar (NH-48)", "IoT-Radar-01", lat, lng)
         
         cursor.execute(query, values)
         db.commit()
@@ -945,6 +971,29 @@ def pay_fine(violation_id):
         return jsonify({"error": f"Database error: {str(db_error)}"}), 500
     except Exception as e:
         return jsonify({"error": f"Payment processing failed: {str(e)}"}), 400
+
+@app.route('/get-all-violations', methods=['GET'])
+@jwt_required()
+def get_all_violations():
+    try:
+        db = get_db_connection()
+        if not db:
+            return jsonify({"error": "Database connection failed"}), 500
+
+        cursor = db.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT v.ViolationID, v.ViolationType, v.FineAmount, v.Location, v.Status, v.DateTime as DateReported,
+                   v.Latitude, v.Longitude, v.evidence_image, vehicle.LicensePlate 
+            FROM Violations v
+            JOIN Vehicle vehicle ON v.VehicleID = vehicle.VehicleID
+        """)
+        violations = cursor.fetchall()
+        cursor.close()
+        db.close()
+        return jsonify(violations), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
     
 # run the Flask app
 if __name__ == '__main__':

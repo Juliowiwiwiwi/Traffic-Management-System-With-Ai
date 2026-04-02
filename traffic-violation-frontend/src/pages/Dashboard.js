@@ -8,6 +8,7 @@ import {
     FaCheckCircle, 
     FaMoneyBillWave 
 } from 'react-icons/fa';
+import ViolationsMap from '../components/ViolationsMap';
 
 const Dashboard = () => {
     const [stats, setStats] = useState(null);
@@ -111,6 +112,8 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
+
+            <ViolationsMap />
 
         </div>
     );
