@@ -84,3 +84,31 @@
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* --- Charts CSS --- */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.chart-box {
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.chart-box h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #f8fafc;
+    font-size: 1.1rem;
+    font-weight: 600;
+}

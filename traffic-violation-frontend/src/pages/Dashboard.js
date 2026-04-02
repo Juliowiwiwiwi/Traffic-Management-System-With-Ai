@@ -8,7 +8,13 @@ import {
     FaCheckCircle, 
     FaMoneyBillWave 
 } from 'react-icons/fa';
+import { 
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+    PieChart, Pie, Cell, Legend
+} from 'recharts';
 import ViolationsMap from '../components/ViolationsMap';
+
+const COLORS = ['#f4a400', '#f06a11', '#2a64a3', '#dc3545', '#28a745', '#9c27b0'];
 
 const Dashboard = () => {
     const [stats, setStats] = useState(null);
@@ -112,6 +118,43 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Charts Section */}
+            {stats.recent_activity && stats.violation_breakdown && (
+                <div className="charts-grid">
+                    <div className="chart-box">
+                        <h3>Incident Activity (Last 7 Days)</h3>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <LineChart data={stats.recent_activity}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                                <XAxis dataKey="date" stroke="#94a3b8" />
+                                <YAxis stroke="#94a3b8" />
+                                <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', color: '#fff' }} />
+                                <Line type="monotone" dataKey="incidents" stroke="#f4a400" strokeWidth={3} dot={{ fill: '#f4a400', r: 5 }} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="chart-box">
+                        <h3>Violation Breakdown</h3>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <PieChart>
+                                <Pie 
+                                  data={stats.violation_breakdown} 
+                                  cx="50%" cy="50%" 
+                                  innerRadius={60} outerRadius={100} 
+                                  paddingAngle={5} dataKey="value"
+                                >
+                                    {stats.violation_breakdown.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', color: '#fff' }} />
+                                <Legend wrapperStyle={{ color: '#94a3b8' }}/>
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            )}
 
             <ViolationsMap />
 

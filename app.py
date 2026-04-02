@@ -324,6 +324,20 @@ def get_dashboard_stats():
         top_violation_result = cursor.fetchone()
         top_violation = top_violation_result[0] if top_violation_result else "N/A"
 
+        # Violation Breakdown for Pie Chart
+        cursor.execute("SELECT ViolationType, COUNT(*) as count FROM Violations GROUP BY ViolationType")
+        violation_breakdown = [{"name": row[0], "value": row[1]} for row in cursor.fetchall()]
+
+        # Recent Activity (Last 7 Days) for Area/Line Chart
+        cursor.execute("""
+            SELECT DATE(DateTime) as date, COUNT(*) as count 
+            FROM Violations 
+            GROUP BY DATE(DateTime) 
+            ORDER BY date DESC 
+            LIMIT 7
+        """)
+        recent_activity = [{"date": str(row[0]), "incidents": row[1]} for row in reversed(cursor.fetchall())]
+
         cursor.close()
         db.close()
 
@@ -333,7 +347,9 @@ def get_dashboard_stats():
             "total_violations": total_violations,
             "total_paid": total_paid,
             "total_unpaid": total_unpaid,
-            "top_violation": top_violation
+            "top_violation": top_violation,
+            "violation_breakdown": violation_breakdown,
+            "recent_activity": recent_activity
         }), 200
 
     except Exception as e:

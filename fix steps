@@ -1,0 +1,27 @@
+# 📹 Video Processing & AI Inference Plan
+
+Since your AI model (`best.pt`) is specifically trained to analyze single images rather than live video streams natively, attempting to rapid-fire hundreds of video frames across the network to the backend is what caused the bottleneck/disconnect in the previous iteration.
+
+Here is the exact solution to achieve your desired outcome seamlessly: **Pre-processing**.
+
+## The Solution Map
+
+### 1. The Python Video Processor (Backend)
+I will write a brand new Python script: `process_video.py`.
+- **How it works:** It will open your `bike_1.mp4` file and break the video down into individual image frames using OpenCV (`cv2.VideoCapture`).
+- It will then feed every single frame (as an image) directly into your `YOLO("Weights/best.pt")` model.
+- It will draw your requested **Red Box (Without Helmet)** and **Green Box (With Helmet)** directly onto the frames.
+- Finally, it will stitch all those newly drawn AI-analyzed frames back together into a new video file called `analyzed_bike.mp4`.
+
+### 2. The Interactive UI Upgrade (Frontend)
+- **Zero Database Insertions:** The frontend will no longer attempt to post to the `iot/report-speeding` or `/autodetect` APIs. No fake IDs, no database clutter.
+- **The Visual Switch:** I will update `CCTVSimulation.js` so that when the page loads, it naturally loops the normal, untouched `bike_1.mp4`. But the exact millisecond you press **"Analyse Traffic Violations"**, the React component will seamlessly swap the video source over to `analyzed_bike.mp4`.
+  
+## Why This Rocks
+This creates a **perfect, zero-lag presentation**. To your teacher/audience, it will look like the AI engine is rendering the bounding boxes live across the video feed without stuttering, completely avoiding system crashes and preserving your database!
+
+## User Review Required
+
+> [!WARNING]
+> Please confirm this plan!
+> It takes a few minutes (depending on your CPU/GPU) to process the video once in Python. Once I write `process_video.py`, I will run it in the terminal to generate the finalized `analyzed_bike.mp4`, place it in the React public folder, and update the UI code. Sound good?

@@ -31,7 +31,12 @@ const Header = ({ isAuthenticated, setIsAuthenticated }) => {
           {localStorage.getItem('role') === 'admin' && <Link to="/add-violation">Add Violation</Link>}
           {localStorage.getItem('role') === 'admin' && <Link to="/autodetect">Auto Detect</Link>}
           <Link to="/profile">My Profile</Link>
-          {localStorage.getItem('role') === 'admin' && <Link to="/simulation">🌟 3D Sim</Link>}
+          {localStorage.getItem('role') === 'admin' && (
+            <>
+              <Link to="/simulation">🌟 3D Sim</Link>
+              <Link to="/cctv-sim">🎥 CCTV Sim</Link>
+            </>
+          )}
         </nav>
 
         {/* Right Side: Logout Button */}

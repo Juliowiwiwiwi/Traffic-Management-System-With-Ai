@@ -11,6 +11,8 @@
   import LandingPage from './pages/LandingPage';
   import MyProfile from './pages/MyProfile';
   import Simulation3D from './pages/Simulation3D';
+  import CCTVSimulation from './pages/CCTVSimulation';
+  import AnimatedPage from './components/AnimatedPage';
   import './App.css';
 
   function App() {
@@ -49,17 +51,18 @@
             } />
             
             {/* Admin-only Routes */}
-            <Route path="/dashboard" element={<AdminRoute><Dashboard /></AdminRoute>} />
-            <Route path="/vehicles" element={<AdminRoute><Vehicles /></AdminRoute>} />
-            <Route path="/register-vehicle" element={<AdminRoute><RegisterVehicle /></AdminRoute>} />
-            <Route path="/add-violation" element={<AdminRoute><AddViolation /></AdminRoute>} />
-            <Route path="/autodetect" element={<AdminRoute><AutoDetect /></AdminRoute>} />
-            <Route path="/simulation" element={<AdminRoute><Simulation3D /></AdminRoute>} />
+            <Route path="/dashboard" element={<AdminRoute><AnimatedPage><Dashboard /></AnimatedPage></AdminRoute>} />
+            <Route path="/vehicles" element={<AdminRoute><AnimatedPage><Vehicles /></AnimatedPage></AdminRoute>} />
+            <Route path="/register-vehicle" element={<AdminRoute><AnimatedPage><RegisterVehicle /></AnimatedPage></AdminRoute>} />
+            <Route path="/add-violation" element={<AdminRoute><AnimatedPage><AddViolation /></AnimatedPage></AdminRoute>} />
+            <Route path="/autodetect" element={<AdminRoute><AnimatedPage><AutoDetect /></AnimatedPage></AdminRoute>} />
+            <Route path="/simulation" element={<AdminRoute><AnimatedPage><Simulation3D /></AnimatedPage></AdminRoute>} />
+            <Route path="/cctv-sim" element={<AdminRoute><AnimatedPage><CCTVSimulation /></AnimatedPage></AdminRoute>} />
 
             {/* Standard Authenticated Routes */}
-            <Route path="/profile" element={<PrivateRoute><MyProfile /></PrivateRoute>} />
-            <Route path="/violations" element={<PrivateRoute><Violations /></PrivateRoute>} />
-            <Route path="/payments" element={<PrivateRoute><Payments /></PrivateRoute>} />
+            <Route path="/profile" element={<PrivateRoute><AnimatedPage><MyProfile /></AnimatedPage></PrivateRoute>} />
+            <Route path="/violations" element={<PrivateRoute><AnimatedPage><Violations /></AnimatedPage></PrivateRoute>} />
+            <Route path="/payments" element={<PrivateRoute><AnimatedPage><Payments /></AnimatedPage></PrivateRoute>} />
             
             {/* Catch-all unknown routes */}
             <Route path="*" element={<Navigate to={getDefaultRoute()} />} />
