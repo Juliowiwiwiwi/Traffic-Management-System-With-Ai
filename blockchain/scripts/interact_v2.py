@@ -4,8 +4,8 @@ import json
 
 # CONFIG 
 RPC_URL = "http://127.0.0.1:8545"
-CONTRACT_ADDRESS = "0x051C742f74Bd5c1278108F2cDa15D4d88Be7721a"
-PRIVATE_KEY = "0xe75577de632f5f3dc42cf6f8f3d0aabbfb1d96d226e26c2f005258a4c3a787f1"  
+CONTRACT_ADDRESS = "0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1"
+PRIVATE_KEY = "0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d"  
 
 ABI_PATH = "blockchain/build/blockchain_contracts_ViolationAuditV2_sol_ViolationAuditV2.abi"
 

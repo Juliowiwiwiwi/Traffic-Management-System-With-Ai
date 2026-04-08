@@ -4,13 +4,12 @@ import { Sky } from '@react-three/drei';
 import axios from 'axios';
 import './Simulation3D.css';
 
-// A simple moving car
 const Car = ({ speed }) => {
   const meshRef = useRef();
 
   useFrame((state, delta) => {
     if (meshRef.current) {
-      // Speed is km/h, let's scale it for visual representation
+
       meshRef.current.position.z -= (speed * delta * 0.05);
 
       // loop it back continuously
@@ -28,10 +27,10 @@ const Car = ({ speed }) => {
         <meshStandardMaterial color={speed > 90 ? "crimson" : "#2196f3"} />
       </mesh>
       {/* Wheels */}
-      <mesh position={[-1.1, -0.5, 1.2]}><cylinderGeometry args={[0.4, 0.4, 0.5]} rotation={[0, 0, Math.PI / 2]}/><meshStandardMaterial color="#111" /></mesh>
-      <mesh position={[1.1, -0.5, 1.2]}><cylinderGeometry args={[0.4, 0.4, 0.5]} rotation={[0, 0, Math.PI / 2]}/><meshStandardMaterial color="#111" /></mesh>
-      <mesh position={[-1.1, -0.5, -1.2]}><cylinderGeometry args={[0.4, 0.4, 0.5]} rotation={[0, 0, Math.PI / 2]}/><meshStandardMaterial color="#111" /></mesh>
-      <mesh position={[1.1, -0.5, -1.2]}><cylinderGeometry args={[0.4, 0.4, 0.5]} rotation={[0, 0, Math.PI / 2]}/><meshStandardMaterial color="#111" /></mesh>
+      <mesh position={[-1.1, -0.5, 1.2]}><cylinderGeometry args={[0.4, 0.4, 0.5]} rotation={[0, 0, Math.PI / 2]} /><meshStandardMaterial color="#111" /></mesh>
+      <mesh position={[1.1, -0.5, 1.2]}><cylinderGeometry args={[0.4, 0.4, 0.5]} rotation={[0, 0, Math.PI / 2]} /><meshStandardMaterial color="#111" /></mesh>
+      <mesh position={[-1.1, -0.5, -1.2]}><cylinderGeometry args={[0.4, 0.4, 0.5]} rotation={[0, 0, Math.PI / 2]} /><meshStandardMaterial color="#111" /></mesh>
+      <mesh position={[1.1, -0.5, -1.2]}><cylinderGeometry args={[0.4, 0.4, 0.5]} rotation={[0, 0, Math.PI / 2]} /><meshStandardMaterial color="#111" /></mesh>
     </group>
   );
 };
@@ -43,7 +42,7 @@ const Scene = ({ speed }) => {
       <Sky sunPosition={[100, 20, 100]} turbidity={0.5} />
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 10]} intensity={1.5} />
-      
+
       <Car speed={speed} />
 
       {/* Road */}
@@ -65,7 +64,7 @@ const Simulation3D = () => {
   const [speed, setSpeed] = useState(60);
   const [flashing, setFlashing] = useState(false);
   const [logs, setLogs] = useState([]);
-  
+
   const [licensePlate, setLicensePlate] = useState("RJ2026B");
 
   const handleSpeedChange = (e) => {
@@ -80,7 +79,7 @@ const Simulation3D = () => {
     });
   };
 
-  // We only want to report once, wait a bit before being able to report again
+  // We only want to report once so like wai before doin again
   const [canReport, setCanReport] = useState(true);
 
   useEffect(() => {
@@ -118,10 +117,10 @@ const Simulation3D = () => {
   return (
     <div className="simulation-container page-content">
       <div className="sim-header">
-        <h2>🌐 3D IoT Radar Simulator</h2>
+        <h2>3D IoT Radar Simulator</h2>
         <p>Interactive environment: Adjust vehicle speed to simulate speeding violations. The local API triggers automatically when exceeding 90 km/h.</p>
       </div>
-      
+
       <div className="sim-layout shadow-box">
         {/* Left side: Controls */}
         <div className="sim-controls">
@@ -132,24 +131,24 @@ const Simulation3D = () => {
             </span>
           </div>
 
-          <div className="plate-input-wrapper" style={{display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem'}}>
+          <div className="plate-input-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
             <label htmlFor="sim-plate"><strong>Target License Plate:</strong></label>
-            <input 
-               id="sim-plate"
-               type="text" 
-               value={licensePlate} 
-               onChange={(e) => setLicensePlate(e.target.value)} 
-               style={{padding:'0.5rem', borderRadius:'4px', border:'1px solid #ccc', fontSize:'1.1rem'}}
+            <input
+              id="sim-plate"
+              type="text"
+              value={licensePlate}
+              onChange={(e) => setLicensePlate(e.target.value)}
+              style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', fontSize: '1.1rem' }}
             />
           </div>
-          
+
           <div className="slider-wrapper">
-             <input 
-              type="range" 
-              min="0" 
-              max="160" 
-              value={speed} 
-              onChange={handleSpeedChange} 
+            <input
+              type="range"
+              min="0"
+              max="160"
+              value={speed}
+              onChange={handleSpeedChange}
               className={`speed-slider ${speed > 90 ? 'slider-danger' : ''}`}
             />
           </div>

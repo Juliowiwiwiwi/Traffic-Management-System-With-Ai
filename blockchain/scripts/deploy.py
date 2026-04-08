@@ -7,7 +7,7 @@ w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
 assert w3.is_connected(), "Not connected to Ganache"
 
 
-PRIVATE_KEY = "0xe75577de632f5f3dc42cf6f8f3d0aabbfb1d96d226e26c2f005258a4c3a787f1"
+PRIVATE_KEY = "0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d"
 account = Account.from_key(PRIVATE_KEY)
 deployer = account.address
 

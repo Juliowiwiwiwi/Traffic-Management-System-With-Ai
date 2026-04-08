@@ -4,7 +4,7 @@ from eth_account import Account
 
 GANACHE_URL = "http://127.0.0.1:8545"
 # Default Ganache CLI First Account Key
-PRIVATE_KEY = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+PRIVATE_KEY = "0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d"
 CONTRACT_ADDRESS = None  # Will be set dynamically
 
 w3 = Web3(Web3.HTTPProvider(GANACHE_URL))

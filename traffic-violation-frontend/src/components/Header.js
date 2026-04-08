@@ -33,8 +33,8 @@ const Header = ({ isAuthenticated, setIsAuthenticated }) => {
           <Link to="/profile">My Profile</Link>
           {localStorage.getItem('role') === 'admin' && (
             <>
-              <Link to="/simulation">🌟 3D Sim</Link>
-              <Link to="/cctv-sim">🎥 CCTV Sim</Link>
+              <Link to="/simulation"> 3D Sim</Link>
+              <Link to="/cctv-sim"> CCTV Sim</Link>
             </>
           )}
         </nav>

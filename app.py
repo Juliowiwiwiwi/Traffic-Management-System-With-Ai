@@ -607,6 +607,31 @@ def add_violation():
 
 
 #auto detection stuff
+import subprocess
+active_detection_process = None
+
+@app.route('/run-helmet-script', methods=['POST'])
+@jwt_required()
+def run_helmet_script():
+    global active_detection_process
+    if active_detection_process is None or active_detection_process.poll() is not None:
+        try:
+            # We want to run it without blocking the web request
+            active_detection_process = subprocess.Popen(['python', 'helmet_detection_video.py'])
+            return jsonify({"message": "Detection script started."}), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+    return jsonify({"message": "Already running."}), 200
+
+@app.route('/stop-helmet-script', methods=['POST'])
+@jwt_required()
+def stop_helmet_script():
+    global active_detection_process
+    if active_detection_process is not None and active_detection_process.poll() is None:
+        active_detection_process.terminate()
+        active_detection_process = None
+        return jsonify({"message": "Detection script stopped."}), 200
+    return jsonify({"message": "Not running."}), 200
 
 @app.route('/autodetect', methods=['POST'])
 @jwt_required()

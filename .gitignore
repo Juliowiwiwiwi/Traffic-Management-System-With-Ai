@@ -16,3 +16,9 @@ evidence_uploads/
 
 # Environment files
 .env
+
+
+# Media files
+*.mp4
+*.avi
+*.mov
