@@ -83,4 +83,8 @@ export const register = async (username, password) => {
   return await api.post("/register", { username, password });
 };
 
+export const verifyBlockchain = async (violationID) => {
+  return await api.get(`/verify-violation-on-chain/${violationID}`);
+};
+
 // Add more API calls as needed

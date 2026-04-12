@@ -16,7 +16,7 @@ from flask import send_from_directory
 from audit.schema import canonical_violation_payload
 from audit.hasher import hash_violation
 from datetime import datetime
-from blockchain.service import setup_blockchain, anchor_violation_on_chain
+from blockchain.service import setup_blockchain, anchor_violation_on_chain, verify_violation_on_chain
 
 
 # initialize flask app
@@ -928,6 +928,48 @@ def get_violations(license_plate):
         return jsonify(results), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/verify-violation-on-chain/<int:violation_id>', methods=['GET'])
+@jwt_required()
+def verify_violation_api(violation_id):
+    try:
+        db = get_db_connection()
+        if not db:
+            return jsonify({"error": "Database connection failed"}), 500
+
+        cursor = db.cursor()
+        
+        # Get hash from database
+        cursor.execute("SELECT violation_hash FROM Violations WHERE ViolationID = %s", (violation_id,))
+        violation = cursor.fetchone()
+        
+        cursor.close()
+        db.close()
+        
+        if not violation or not violation[0]:
+            return jsonify({"error": "Violation hash not found in database"}), 404
+            
+        v_hash = violation[0]
+        
+        # Verify on blockchain
+        is_verified = verify_violation_on_chain(v_hash)
+        
+        if is_verified:
+            return jsonify({
+                "verified": True,
+                "message": "Violation matches the blockchain record exactly.",
+                "hash": v_hash
+            }), 200
+        else:
+            return jsonify({
+                "verified": False,
+                "message": "Tampering detected. Hash not found on blockchain.",
+                "hash": v_hash
+            }), 400
+            
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 
 #get violation from violation id

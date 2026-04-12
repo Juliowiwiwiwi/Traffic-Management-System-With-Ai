@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getViolations } from "../services/api";
+import { getViolations, verifyBlockchain } from "../services/api";
 import "./Violations.css";
 
 function Violations() {
@@ -7,10 +7,12 @@ function Violations() {
   const [violations, setViolations] = useState([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [verificationStatuses, setVerificationStatuses] = useState({});
 
   const fetchViolations = async () => {
     setError("");
     setIsLoading(true);
+    setVerificationStatuses({}); // Reset statuses when searching again
 
     if (!licensePlate.trim()) {
       setError("Please enter a license plate number");
@@ -32,6 +34,22 @@ function Violations() {
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       fetchViolations();
+    }
+  };
+
+  const handleVerifyBlockchain = async (violationID) => {
+    setVerificationStatuses(prev => ({ ...prev, [violationID]: 'loading' }));
+    
+    try {
+      const response = await verifyBlockchain(violationID);
+      if (response.data.verified) {
+        setVerificationStatuses(prev => ({ ...prev, [violationID]: 'success' }));
+      } else {
+        setVerificationStatuses(prev => ({ ...prev, [violationID]: 'fail' }));
+      }
+    } catch (err) {
+      console.error("Blockchain verification error:", err);
+      setVerificationStatuses(prev => ({ ...prev, [violationID]: 'fail' }));
     }
   };
 
@@ -75,6 +93,7 @@ function Violations() {
                 <th>Status</th>
                 <th>Location</th>
                 <th>Evidence</th>
+                <th>Blockchain Verification</th>
               </tr>
             </thead>
             <tbody>
@@ -97,6 +116,22 @@ function Violations() {
                       </a>
                     ) : (
                       "N/A"
+                    )}
+                  </td>
+                  <td>
+                    {verificationStatuses[v.ViolationID] === 'loading' ? (
+                      <span className="loading-spinner" style={{borderColor: '#bbb', borderTopColor: '#3498db'}}></span>
+                    ) : verificationStatuses[v.ViolationID] === 'success' ? (
+                      <span className="verify-success">✓ Verified</span>
+                    ) : verificationStatuses[v.ViolationID] === 'fail' ? (
+                      <span className="verify-fail">✗ Tampered</span>
+                    ) : (
+                      <button 
+                        className="verify-btn"
+                        onClick={() => handleVerifyBlockchain(v.ViolationID)}
+                      >
+                        Verify Check
+                      </button>
                     )}
                   </td>
                 </tr>

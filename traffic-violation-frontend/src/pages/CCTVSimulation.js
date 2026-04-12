@@ -23,8 +23,8 @@ const CCTVSimulation = () => {
       // Force the browser to fetch the new video file immediately
       videoRef.current.load();
 
-      // Set playback speed to normal (1.0)
-      videoRef.current.playbackRate = 1.0;
+      // Set playback speed
+      videoRef.current.playbackRate = isAnalyzing ? 0.08 : 1.0;
 
       // Attempt to play the new video
       const playPromise = videoRef.current.play();
@@ -38,32 +38,11 @@ const CCTVSimulation = () => {
 
   // Handle Mock Logs and Timers
   useEffect(() => {
-    let timeoutId;
-
     if (isAnalyzing) {
       logMessage("🔍 SYSTEM: Traffic analysis started... Processing feed.");
-
-      const triggerMockLogs = () => {
-        if (!isAnalyzing) return;
-
-        setFlashing(true);
-        setTimeout(() => setFlashing(false), 200);
-
-        const possiblePlates = ["RJ-14-CC-2345", "DL-9C-AA-0001", "MH-12-PQ-9988", "UP-32-AB-5566", "HR-26-DK-9011"];
-        const randomPlate = possiblePlates[Math.floor(Math.random() * possiblePlates.length)];
-        logMessage(`📸 AI DETECTED: [Without Helmet] Plate: ${randomPlate}`);
-
-        if (isAnalyzing) {
-          timeoutId = setTimeout(triggerMockLogs, 4000 + Math.random() * 3000);
-        }
-      };
-
-      timeoutId = setTimeout(triggerMockLogs, 2000);
     } else {
       logMessage("🛑 SYSTEM: Analysis stopped. Standby.");
     }
-
-    return () => clearTimeout(timeoutId);
   }, [isAnalyzing]);
 
   return (

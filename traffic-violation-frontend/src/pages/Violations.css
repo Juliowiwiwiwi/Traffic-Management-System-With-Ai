@@ -185,3 +185,40 @@
       padding: 0.75rem 0.5rem;
     }
   }
+  
+  .verify-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .verify-btn:hover:not(:disabled) {
+    background-color: #2980b9;
+  }
+  
+  .verify-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  .verify-success {
+    color: #27ae60;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .verify-fail {
+    color: #c0392b;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }

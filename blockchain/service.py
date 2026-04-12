@@ -83,3 +83,34 @@ def anchor_violation_on_chain(violation_id, violation_hash, evidence_hash=b""):
     except Exception as e:
          print(f"Failed to anchor on chain: {e}")
          return None
+
+def verify_violation_on_chain(violation_hash):
+    """
+    Checks if a given violation hash exists in the smart contract's array.
+    """
+    if contract is None:
+        print("Blockchain not initialized.")
+        return False
+        
+    try:
+        # Convert string to bytes32 format
+        if isinstance(violation_hash, str):
+            v_hash_bytes = Web3.to_bytes(text=violation_hash).ljust(32, b'\0')[:32]
+        else:
+            v_hash_bytes = violation_hash.ljust(32, b'\0')[:32]
+            
+        count = contract.functions.getViolationCount().call()
+        for i in range(count):
+            try:
+                v = contract.functions.getViolation(i).call()
+                # v[0] is the violationHash
+                if v[0] == v_hash_bytes:
+                    return True
+            except Exception as loop_e:
+                 print(f"Error reading index {i}: {loop_e}")
+                 continue
+        
+        return False
+    except Exception as e:
+        print(f"Verification failed: {e}")
+        return False

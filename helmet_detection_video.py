@@ -60,7 +60,7 @@ while True:
             cvzone.putTextRect(img, f'ID: {track_id} {classNames[cls]} {conf}', (max(0, x1), max(35, y1)), scale=1, thickness=1)
 
     cv2.imshow("Image", img)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(200) & 0xFF == ord('q'):
         break
 
 # Release resources
