@@ -1,6 +1,6 @@
-# 🚦 Traffic Management System with AI Violation Detection
+# 🚦 Traffic Management System with AI Detection & Blockchain Auditing
 
-A full-stack **Traffic Management System** built with **Flask, React, MySQL, and AI**. The system manages vehicles, violations, payments, and includes an **AI-powered helmet violation detector with automatic license plate recognition**.
+A full-stack **Traffic Management System** built with **Flask, React, MySQL, Web3, and AI**. The system manages vehicles, violations, and payments while incorporating an **AI-powered helmet violation detector**, **interactive 3D IoT simulations**, and an **immutable blockchain audit trail** to ensure data integrity.
 
 ## ⭐ Key Features
 
@@ -23,6 +23,7 @@ A full-stack **Traffic Management System** built with **Flask, React, MySQL, and
 * View violations per vehicle
 * Check violation details
 * Update fine status after payment
+* **Live Geographic Map:** Real-time plotting of incidents across Rajasthan using Leaflet and OpenStreetMap.
 
 ### 🤖 AI Violation Detection
 
@@ -43,14 +44,19 @@ Uses **YOLOv8** + **EasyOCR** to automatically detect:
 
 **API:** `POST /autodetect`
 
-### 📡 IoT Radar Gun Simulation
+### ⛓️ Immutable Blockchain Audit Trail
 
-Simulates an IoT device reporting speeding violations:
+Ensures database integrity by running alongside the traditional MySQL database:
+* Generates a unique SHA-256 cryptographic hash of every violation payload.
+* Automatically anchors the hash to a local Ethereum network via a Solidity smart contract (`ViolationAuditV2`).
+* **Verification Engine:** Allows admins to cross-reference MySQL records against the immutable blockchain ledger to instantly detect database tampering.
 
-* Validates API key
-* Auto-registers unknown vehicles
-* Calculates fine based on speed
-* Logs "Speeding" violation
+### 📡 3D IoT Radar Gun Simulation
+
+An interactive WebGL digital twin for testing IoT ingestion:
+* **3D Environment:** Built with React Three Fiber, featuring a controllable vehicle and dynamic lighting.
+* **Automated Triggers:** Automatically fires secure API requests when the simulated vehicle exceeds 90 km/h.
+* Validates API key, auto-registers unknown vehicles, and logs the "Speeding" violation.
 
 **API:** `POST /iot/report-speeding`
 
@@ -77,16 +83,16 @@ Provides summary stats:
 * OCR → EasyOCR
 * OpenCV for image processing
 
-## 🗄 Database Structure
+## 🗄 Database & Smart Contracts
 
-MySQL tables:
+**MySQL Tables:**
+* `loginuser`
+* `Vehicle`
+* `Violations`
+* `Fines`
 
-```
-loginuser
-Vehicle
-Violations
-Fines
-```
+**Ethereum Smart Contracts:**
+* `ViolationAuditV2.sol` (Maintains state lifecycle and evidence hashes on the blockchain)
 
 ## 📸 Screenshots
 
@@ -116,10 +122,10 @@ Fines
 
 ## 🛠️ Tech Stack
 
-**Backend:** Flask, OpenCV, YOLOv8, EasyOCR, MySQL, JWT, bcrypt
-
-**Frontend:** React.js, Axios, React Router
-
+* **Backend:** Python, Flask, MySQL, JWT, bcrypt
+* **AI & Computer Vision:** PyTorch, YOLOv8, EasyOCR, OpenCV, NumPy
+* **Blockchain:** Solidity, Ganache, Web3.py
+* **Frontend:** React.js, Axios, React Router, React Three Fiber (3D WebGL), React-Leaflet (Maps)
 ## ▶️ How to Run the Project
 
 1. Install Python dependencies:
@@ -129,7 +135,8 @@ pip install -r requirements.txt
 ```
 
 2. Create MySQL database `TrafficDB` and import `TrafficDB.sql`.
-3. Run backend:
+3. Start your local Ganache Ethereum workspace on port 8545.
+4. Run backend:
 
 ```
 python app.py
@@ -152,6 +159,8 @@ Traffic-Management-System-With-Ai/
 ├── TrafficDB.sql
 ├── Weights/
 ├── evidence_uploads/
+├── blockchain/
+├── audit/
 ├── traffic-violation-frontend/
 └── screenshots/
 ```
@@ -162,4 +171,4 @@ Academic & educational use.
 
 ## 🙌 Acknowledgments
 
-YOLOv8, EasyOCR, OpenCV, Flask, React communities.
+YOLOv8, EasyOCR, OpenCV, Flask, React, and Web3 communities.
